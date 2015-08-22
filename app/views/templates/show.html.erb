@@ -6,11 +6,18 @@
     <% if segment.show_heading %>
       <h3 class="text-center"><%= segment.name.titleize %></h3>
     <% end %>
-    <% segment.columns.times do %>
-      <div class="col-md-4">
-        sample text
-      </div>
+
+    <% segment.groups.in_groups_of(segment.columns, false) do |groups| %>
+      <% groups.each do |group| %>
+        <div class="col-md-4">
+          <% if group.show_heading %>
+            <h4><%= group.name %> <small>(<%= group.dots_available %>)</small></h4>
+          <% end %>
+          <% group.traits.each do |trait| %>
+            <p><strong><%= trait.name %></strong> <%= '*' * trait.start_value.to_i %><%= 'o' * (trait.max_value.to_i - trait.start_value.to_i) %></p>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
-    <pre><%= segment.inspect %></pre>
   </div>
 <% end %>

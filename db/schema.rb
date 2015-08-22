@@ -11,7 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150821052128) do
+ActiveRecord::Schema.define(version: 20150822213225) do
+
+  create_table "group_traits", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "trait_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "number"
+    t.boolean  "show_heading"
+    t.integer  "dots_available"
+    t.string   "input_type"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "segment_groups", force: :cascade do |t|
+    t.integer  "segment_id"
+    t.integer  "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "segments", force: :cascade do |t|
     t.string   "name"
@@ -34,6 +58,17 @@ ActiveRecord::Schema.define(version: 20150821052128) do
     t.string   "subtitle"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "traits", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "max_value"
+    t.integer  "start_value"
+    t.integer  "freebie_cost"
+    t.integer  "experiance_dot_cost"
+    t.integer  "experiance_new_cost"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
 end
