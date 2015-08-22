@@ -1,0 +1,10 @@
+<% title 'Templates' %>
+<h1>Templates</h1>
+<h3>Import Template</h3>
+<%= form_tag import_templates_path, multipart: true do %>
+<span class="btn btn-default btn-file">
+  <%= file_field_tag :file %>
+</span>
+
+  <%= submit_tag "Import", class: 'btn btn-primary' %>
+<% end %>

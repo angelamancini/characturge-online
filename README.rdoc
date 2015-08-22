@@ -1,0 +1,5 @@
+== Characturge Online
+
+Characturge is a program written by Ben Buckner to make and keep track of Character Sheets for The White Wolf Storyteller System of games. Unfortunately, Ben's webpage has vanished into the oblivion of the Internet and the Characturge program won't run on modern OSes since it was a 16-bit program.
+
+A friend of mine found a gold mine of templates and challenged me to recreate the Characturge online.
