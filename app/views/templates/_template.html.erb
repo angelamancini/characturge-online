@@ -1,0 +1,7 @@
+<tr>
+  <td>
+    <%= link_to "#{template.title}: #{template.subtitle}", template_path(template) %>
+  </td>
+  <td><%= link_to "<i class='fa fa-trash'></i> Delete".html_safe, { action: "destroy", id: template.id },
+  method: :delete, data: { confirm: "Really delete #{template.title}?" } %></td>
+</tr>

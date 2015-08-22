@@ -1,4 +1,6 @@
 class Template < ActiveRecord::Base
+  has_many :template_segments
+  has_many :segments, through: :template_segments
 
   def self.import(file)
     begin

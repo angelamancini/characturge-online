@@ -1,0 +1,16 @@
+<% title 'Templates' %>
+<h1 class="text-center"><%= @template.title.titleize %> <small><%= @template.subtitle.titleize %></small></h1>
+<hr />
+<% @template.segments.each do |segment| %>
+  <div class="row text-center">
+    <% if segment.show_heading %>
+      <h3 class="text-center"><%= segment.name.titleize %></h3>
+    <% end %>
+    <% segment.columns.times do %>
+      <div class="col-md-4">
+        sample text
+      </div>
+    <% end %>
+    <pre><%= segment.inspect %></pre>
+  </div>
+<% end %>

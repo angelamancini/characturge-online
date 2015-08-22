@@ -66,7 +66,8 @@ module Parser
             end
           end
           template_hash[:segments] = segments
-          return JSON.pretty_generate(template_hash)
+          # binding.pry 
+          return template_hash
         rescue ArgumentError => e
           # binding.pry
           raise ArgumentError, e

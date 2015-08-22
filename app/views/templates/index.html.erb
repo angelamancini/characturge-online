@@ -8,3 +8,21 @@
 
   <%= submit_tag "Import", class: 'btn btn-primary' %>
 <% end %>
+<hr />
+<% if @templates.count > 0 %>
+  <div class="table-responsive">
+    <table id='template-table' class='table table-striped table-hover'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= content_tag :div, id: 'templates', data: { url: templates_path } do %>
+          <%= render @templates %>
+        <% end %>
+      </thbody>
+    </table>
+  </div>
+<% end %>
