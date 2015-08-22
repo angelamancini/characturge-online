@@ -14,8 +14,13 @@
             <h4><%= group.name %> <small>(<%= group.dots_available %>)</small></h4>
           <% end %>
           <% group.traits.each do |trait| %>
-            <p><strong><%= trait.name %></strong> <%= '*' * trait.start_value.to_i %><%= 'o' * (trait.max_value.to_i - trait.start_value.to_i) %></p>
+            <p><strong><%= trait.name %></strong>
+              <% if group.input_type == "dots" %>
+              <%= "* " * trait.start_value.to_i %> <%= 'o ' * (trait.max_value.to_i - trait.start_value.to_i) %>
+              <% end %>
+            </p>
           <% end %>
+          <!-- <pre>< %= group.inspect %></pre> -->
         </div>
       <% end %>
     <% end %>

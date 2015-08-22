@@ -20,7 +20,11 @@ module Parser
             if key.include?('Segment')
               segment = {}
               segment[:segment] = value.downcase
-              segment[:columns] = template[value]['Columns'].downcase
+              if template[value]['Columns']
+                segment[:columns] = template[value]['Columns']
+              else
+                segment[:columns] = '3'
+              end
               segment[:has_priorities] = template[value]['HasPriorities'].downcase
               segment[:show_heading] = template[value]['ShowHeading'].downcase
               segment_groups = template[value]['Groups'].split(',')
@@ -66,7 +70,7 @@ module Parser
             end
           end
           template_hash[:segments] = segments
-          # binding.pry 
+          # binding.pry
           return template_hash
         rescue ArgumentError => e
           # binding.pry
