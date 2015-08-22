@@ -1,6 +1,0 @@
-      invoke  active_record
-      create    db/migrate/20150822210105_create_groups.rb
-      create    app/models/group.rb
-      invoke    test_unit
-      create      test/models/group_test.rb
-      create      test/fixtures/groups.yml
