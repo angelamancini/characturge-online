@@ -1,4 +1,4 @@
-<% title 'Templates' %>
+<% title "#{@template.title.titleize}: #{@template.subtitle.titleize}" %>
 <h1 class="text-center"><%= @template.title.titleize %> <small><%= @template.subtitle.titleize %></small></h1>
 <hr />
 <% @template.segments.each do |segment| %>
@@ -14,9 +14,9 @@
             <h4><%= group.name %> <small>(<%= group.dots_available %>)</small></h4>
           <% end %>
           <% group.traits.each do |trait| %>
-            <p><strong><%= trait.name %></strong>
+            <p class='text-left'><strong><%= trait.name %></strong>
               <% if group.input_type == "dots" %>
-              <%= "* " * trait.start_value.to_i %> <%= 'o ' * (trait.max_value.to_i - trait.start_value.to_i) %>
+                <%= write_dots(trait.start_value, trait.max_value) %>
               <% end %>
             </p>
           <% end %>
@@ -25,4 +25,5 @@
       <% end %>
     <% end %>
   </div>
+  <hr />
 <% end %>

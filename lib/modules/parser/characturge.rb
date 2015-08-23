@@ -4,6 +4,15 @@ module Parser
     require 'json'
     class << self
 
+      def segments(template)
+      end
+
+      def groups(template)
+      end
+
+      def traits(template)
+      end
+
       def parse_gct(file)
         begin
           file = File.open(file.path, 'r+:windows-1252:utf-8')
@@ -15,7 +24,6 @@ module Parser
           template_hash[:freeb_total] = template['Template']['FreebTot']
           template_hash[:exp_total] = template['Template']['ExpTot']
           segments = []
-          groups = []
           template['Template'].each do |key, value|
             if key.include?('Segment')
               segment = {}
