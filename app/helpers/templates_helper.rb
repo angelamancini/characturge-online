@@ -28,7 +28,7 @@ module TemplatesHelper
     when "merits"
       "#{trait.name} <span class='pull-right'>#{text_field_tag trait.name}</span>".html_safe
     when "health"
-      "#{trait.name} <span class='pull-right'>#{text_field_tag trait.name} <i class='fa fa-square-o'></i></span>".html_safe
+      "#{trait.name} <span class='pull-right'>#{text_field_tag trait.name, trait.start_value} <i class='fa fa-square-o'></i></span>".html_safe
     when "circle"
       line = "<i class='fa fa-square-o'></i></span> " * 10
       "<strong>#{trait.name}</strong><br />#{line}<br />#{line}".html_safe
@@ -45,7 +45,7 @@ module TemplatesHelper
     stats = ''
     max_value.times do
       count += 1
-      stats += "<span id='#{name}-#{count}' class='#{name} clicky-stat fa fa-#{icon}-o fa-fw' data-value='#{count}' data-icon='#{icon}'></span>"
+      stats += "<span id='#{name.parameterize}-#{count}' class='#{name.parameterize} clicky-stat fa fa-#{icon}-o fa-fw' data-value='#{count}' data-icon='#{icon}'></span>"
     end
 
     return "<span class='pull-right'>#{stats}</span>".html_safe

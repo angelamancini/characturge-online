@@ -16,7 +16,9 @@
           <% group.traits.each do |trait| %>
             <p class='text-left'>
               <%= show_trait(trait, group.input_type) %>
-              <input type="hidden" name="<%= trait.name %>" id="<%= trait.name %>-value" value="<%= trait.start_value %>">
+              <% if (group.input_type != 'health') && (group.input_type != 'general') %>
+                <input  name="<%= trait.name %>" id="<%= trait.name.parameterize %>-value" class='stat-value' value="<%= trait.start_value %>">
+              <% end %>
             </p>
           <% end %>
           <!-- <pre>Group Type < %= group.input_type %></pre> -->
