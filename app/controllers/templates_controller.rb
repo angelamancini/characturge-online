@@ -25,6 +25,12 @@ class TemplatesController < ApplicationController
           new_group = new_segment.groups.create(name: group[:group], number: group[:number], show_heading: group[:show_heading], dots_available: group[:dots_available], input_type: group[:type])
           group[:traits].each do |trait|
             new_trait = new_group.traits.create(name: trait[:trait], max_value: trait[:max_value], start_value: trait[:start_value], freebie_cost: trait[:freebie_cost], experiance_dot_cost: trait[:experiance_dot_cost], experiance_new_cost: trait[:experiance_new_cost])
+            if trait[:value_list]
+              new_list = new_trait.lists.create(name: trait[:value_list][:list])
+              trait[:value_list][:items].each do |item|
+                new_item = new_list.list_items.create(name: item)
+              end
+            end
           end
         end
       end

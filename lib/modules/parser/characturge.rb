@@ -10,11 +10,31 @@ module Parser
       def groups(template)
       end
 
-      def get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost)
+
+      def get_value_list(value_lists, selection_lists, index)
+        if value_lists[index] && !value_lists[index].blank?
+          list = {}
+          list[:list] = value_lists[index]
+          list[:items] = selection_lists[value_lists[index]].split(',')
+          return list
+        end
+      end
+
+      def get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost, selection_lists)
         trait_array = []
         traits.each_with_index do |trait, index|
           trait_details = {}
           trait_details[:trait] = trait
+          if values
+            if values.count == 1
+              trait_details[:value] = values.first
+            else
+              trait_details[:value] = values[index]
+            end
+          end
+          if value_lists
+            trait_details[:value_list] = get_value_list(value_lists, selection_lists, index)
+          end
           if max_values
             if max_values.count == 1
               trait_details[:max_value] = max_values.first
@@ -81,9 +101,11 @@ module Parser
                 freebie_cost = template[sg]['FreebieCost'].split(',') unless template[sg]['FreebieCost'].nil?
                 experiance_dot_cost = template[sg]['ExperienceDotCost'].split(',') unless template[sg]['ExperienceDotCost'].nil?
                 experiance_new_cost = template[sg]['ExperienceNewCost'].split(',') unless template[sg]['ExperienceNewCost'].nil?
-                trait_array = get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost)
+                selection_lists = template['SelectionLists']
 
-                # trait_values
+                trait_array = get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost, selection_lists)
+
+                # write the group hash
                 segment[:groups].push({ group: sg, number: number, show_heading: show_heading, dots_available: dots_available, type: type, traits: trait_array })
               end
               segments.push(segment)

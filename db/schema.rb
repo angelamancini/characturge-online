@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150822213225) do
+ActiveRecord::Schema.define(version: 20150824020119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,19 @@ ActiveRecord::Schema.define(version: 20150822213225) do
     t.string   "input_type"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "list_items", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "lists", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "segment_groups", force: :cascade do |t|
@@ -59,6 +72,13 @@ ActiveRecord::Schema.define(version: 20150822213225) do
   create_table "templates", force: :cascade do |t|
     t.string   "title"
     t.string   "subtitle"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trait_lists", force: :cascade do |t|
+    t.integer  "trait_id"
+    t.integer  "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
