@@ -52,3 +52,6 @@ gem 'font-awesome-sass', '~> 4.4.0'
 # Template Import
 gem 'parseconfig'
 gem 's3_direct_upload'
+
+# Heroku dependency
+gem 'rails_12factor', group: :production
