@@ -4,9 +4,9 @@ module TemplatesHelper
     case trait_type
     when "general"
       if trait.lists.count > 0
-        field = select_tag trait.lists.first, options_from_collection_for_select(trait.lists.first.list_items, "id", "name")
+        field = select_tag trait.name, options_from_collection_for_select(trait.lists.first.list_items, "id", "name")
       else
-        field = "_____________________"
+        field = text_field_tag trait.name
       end
       "<strong>#{trait.name}</strong> <span class='pull-right'>#{field}</span>".html_safe
     when "dots"
@@ -19,16 +19,16 @@ module TemplatesHelper
       "<strong>#{trait.name}</strong><br />#{big_dots}<br />#{boxes}".html_safe
     when "slots"
       if trait.lists.count > 0
-        select_tag trait.lists.first, options_from_collection_for_select(trait.lists.first.list_items, "id", "name")
+        select_tag trait.name, options_from_collection_for_select(trait.lists.first.list_items, "id", "name")
       else
-        "_____________________"
+        text_field_tag trait.name
       end
     when "doubleslots"
-      "_____________________ <span class='pull-right'>_____________________</span>".html_safe
+      text_field_tag trait.name
     when "merits"
-      "#{trait.name} <span class='pull-right'>_________</span>".html_safe
+      "#{trait.name} <span class='pull-right'>#{text_field_tag trait.name}</span>".html_safe
     when "health"
-      "#{trait.name} <span class='pull-right'>_________ <i class='fa fa-square-o'></i></span>".html_safe
+      "#{trait.name} <span class='pull-right'>#{text_field_tag trait.name} <i class='fa fa-square-o'></i></span>".html_safe
     when "circle"
       line = "<i class='fa fa-square-o'></i></span> " * 10
       "<strong>#{trait.name}</strong><br />#{line}<br />#{line}".html_safe
