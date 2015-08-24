@@ -10,12 +10,12 @@ module TemplatesHelper
       end
       "<strong>#{trait.name}</strong> <span class='pull-right'>#{field}</span>".html_safe
     when "dots"
-      "<strong>#{trait.name}</strong> #{write_icons(trait.start_value, trait.max_value, 'circle')}".html_safe
+      "<strong>#{trait.name}</strong> #{write_icons(trait.start_value, trait.max_value, 'circle', trait.name)}".html_safe
     when "bigdots"
-      "<strong>#{trait.name}</strong><br />#{write_icons(trait.start_value, trait.max_value, 'circle')}".html_safe
+      "<strong>#{trait.name}</strong><br />#{write_icons(trait.start_value, trait.max_value, 'circle', trait.name)}".html_safe
     when "boxedbigdots"
-      big_dots= write_icons(trait.start_value, trait.max_value, 'circle')
-      boxes = write_icons(trait.start_value, trait.max_value, 'square')
+      big_dots= write_icons(trait.start_value, trait.max_value, 'circle', trait.name)
+      boxes = write_icons(trait.start_value, trait.max_value, 'square', trait.name)
       "<strong>#{trait.name}</strong><br />#{big_dots}<br />#{boxes}".html_safe
     when "slots"
       if trait.lists.count > 0
@@ -38,11 +38,16 @@ module TemplatesHelper
 
   end
 
-  def write_icons(start_value, max_value, icon)
+  def write_icons(start_value, max_value, icon, name)
     start_value = start_value.to_i
     max_value = max_value.to_i
-    starting_dots = "<i class='fa fa-#{icon} fa-fw'></i>" * start_value
-    empty_dots = "<i class='fa fa-#{icon}-o fa-fw'></i>" * (max_value - start_value)
-    return "<span class='pull-right'>#{starting_dots}#{empty_dots}</span>".html_safe
+    count = 0
+    stats = ''
+    max_value.times do
+      count += 1
+      stats += "<span id='#{name}-#{count}' class='#{name} clicky-stat fa fa-#{icon}-o fa-fw' data-value='#{count}' data-icon='#{icon}'></span>"
+    end
+
+    return "<span class='pull-right'>#{stats}</span>".html_safe
   end
 end
