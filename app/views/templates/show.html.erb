@@ -1,30 +1,34 @@
-<% title "#{@template.title.titleize}: #{@template.subtitle.titleize}" %>
+<% title "#{@template.title.titleize} #{@template.subtitle.titleize}" %>
 <h1 class="text-center"><%= @template.title.titleize %> <small><%= @template.subtitle.titleize %></small></h1>
 <hr />
-<% @template.segments.each do |segment| %>
-  <div class="row text-center">
-    <% if segment.show_heading %>
-      <h3 class="text-center"><%= segment.name.titleize %></h3>
-    <% end %>
-
-    <% segment.groups.in_groups_of(segment.columns, false) do |groups| %>
-      <% groups.each do |group| %>
-        <div class="col-md-4">
-          <% if group.show_heading %>
-            <h4><%= group.name %> <%= "<small>(#{group.dots_available})</small>".html_safe if group.dots_available %></h4>
-          <% end %>
-          <% group.traits.each do |trait| %>
-            <p class='text-left'>
-              <%= show_trait(trait, group.input_type) %>
-              <% if (group.input_type != 'health') && (group.input_type != 'general') %>
-                <input  name="<%= trait.name %>" id="<%= trait.name.parameterize %>-value" class='stat-value' value="<%= trait.start_value %>">
-              <% end %>
-            </p>
-          <% end %>
-          <!-- <pre>Group Type < %= group.input_type %></pre> -->
-        </div>
+<form class="form-horizontal">
+  <% @template.segments.each do |segment| %>
+    <div class="row text-center">
+      <% if segment.show_heading %>
+        <h3 class="text-center"><%= segment.name.titleize %></h3>
       <% end %>
-    <% end %>
+
+      <% segment.groups.in_groups_of(segment.columns, false) do |groups| %>
+        <% groups.each do |group| %>
+          <div class="col-md-4">
+            <% if group.show_heading %>
+              <h4><%= group.name %> <%= "<small>(#{group.dots_available})</small>".html_safe if group.dots_available %></h4>
+            <% end %>
+            <% group.traits.each do |trait| %>
+              <p class='text-left'>
+                <%= show_trait(trait, group.input_type) %>
+              </p>
+            <% end %>
+            <!-- <pre>Group Type < %= group.input_type %></pre> -->
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <hr />
+  <% end %>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Create Character</button>
+    </div>
   </div>
-  <hr />
-<% end %>
+</form>

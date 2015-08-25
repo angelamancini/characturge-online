@@ -1,0 +1,9 @@
+<!-- "<strong>#{trait.name}</strong> #{write_icons(trait.start_value, trait.max_value, 'circle', trait.name)}".html_safe -->
+
+<div class='form-group'>
+  <label for='<%= trait.name %>' class='col-sm-4 control-label'><%= trait.name %></label>
+  <div class='col-sm-8'>
+    <%= write_icons(trait.start_value, trait.max_value, 'circle', trait.name) %>
+    <input type='hidden' name="<%= trait.name %>" id="<%= trait.name.parameterize %>-value" class='stat-value' value="<%= trait.start_value %>">
+  </div>
+</div>
