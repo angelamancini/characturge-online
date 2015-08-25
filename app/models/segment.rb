@@ -6,6 +6,6 @@ class Segment < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :columns, presence: true
-  validates :has_priorities, presence: true
-  validates :show_heading, presence: true
+  # validates :has_priorities, presence: true
+  # validates :show_heading, presence: true
 end

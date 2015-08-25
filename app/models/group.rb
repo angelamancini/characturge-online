@@ -6,6 +6,6 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :number, presence: true
-  validates :show_heading, presence: true
+  # validates :show_heading, presence: true
   validates :input_type, presence: true
 end
