@@ -4,5 +4,5 @@ class Trait < ActiveRecord::Base
   has_many :trait_lists
   has_many :lists, through: :trait_lists
 
-  validates :name, presence: true, length: { maximum: 50 }
+  # validates :name, presence: true, length: { maximum: 50 }
 end
