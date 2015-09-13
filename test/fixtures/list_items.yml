@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  list_id: 1
+  selection_list_id: 1
 
 two:
   name: MyString
-  list_id: 1
+  selection_list_id: 1

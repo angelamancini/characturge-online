@@ -1,1 +1,8 @@
-<pre><%= @template %></pre>
+<% title 'Import Template' %>
+<h1>Import Template</h1>
+<%= form_tag new_template_path, multipart: true, remote: true do %>
+<span class="btn btn-default btn-file">
+  <%= file_field_tag :file %>
+</span>
+<%= submit_tag "Import", class: 'btn btn-primary' %>
+<% end %>

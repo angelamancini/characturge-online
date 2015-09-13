@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150825015626) do
+ActiveRecord::Schema.define(version: 20150831192221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,15 +44,9 @@ ActiveRecord::Schema.define(version: 20150825015626) do
 
   create_table "list_items", force: :cascade do |t|
     t.string   "name"
-    t.integer  "list_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "lists", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "selection_list_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "segment_groups", force: :cascade do |t|
@@ -71,6 +65,12 @@ ActiveRecord::Schema.define(version: 20150825015626) do
     t.datetime "updated_at",     null: false
   end
 
+  create_table "selection_lists", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "template_segments", force: :cascade do |t|
     t.integer  "template_id"
     t.integer  "segment_id"
@@ -78,18 +78,19 @@ ActiveRecord::Schema.define(version: 20150825015626) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "template_selection_lists", force: :cascade do |t|
+    t.integer  "template_id"
+    t.integer  "selection_list_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
   create_table "templates", force: :cascade do |t|
     t.string   "title"
     t.string   "subtitle"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "trait_lists", force: :cascade do |t|
-    t.integer  "trait_id"
-    t.integer  "list_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "privacy",    default: "public"
   end
 
   create_table "traits", force: :cascade do |t|

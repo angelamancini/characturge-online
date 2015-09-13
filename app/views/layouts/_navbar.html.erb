@@ -8,7 +8,8 @@
         <%= link_to 'Characturge Online', root_path, class: 'navbar-brand' %>
       </div>
       <ul class="nav navbar-nav">
-
+        <li class="<%= active_nav('index', 'templates') %>"><%= link_to '<i class="fa fa-th-list"></i> Templates'.html_safe, templates_path %></li>
+        <li class="<%= active_nav('new', 'templates') %>"><%= link_to '<i class="fa fa-upload"></i> Import Template'.html_safe, import_templates_path %></li>
       </ul>
     </div>
   </div>

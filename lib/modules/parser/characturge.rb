@@ -4,121 +4,160 @@ module Parser
     require 'json'
     class << self
 
-      # def segments(segments_hash)
-      # end
-      #
-      # def groups(template)
-      # end
-      #
-      #
-      # def get_list(lists, selection_lists, index)
-      #   if lists[index] && !lists[index].blank?
-      #     new_list = {}
-      #     new_list[:list] = lists[index]
-      #     new_list[:items] = selection_lists[lists[index]].split(',')
-      #     return new_list
-      #   end
-      # end
-      #
-      # def get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost, selection_lists, trait_lists)
-      #   trait_array = []
-      #   traits.each_with_index do |trait, index|
-      #     trait_details = {}
-      #     trait_details[:trait] = trait
-      #     if values
-      #       if values.count == 1
-      #         trait_details[:value] = values.first
-      #       else
-      #         trait_details[:value] = values[index]
-      #       end
-      #     end
-      #     if value_lists
-      #       trait_details[:value_list] = get_list(value_lists, selection_lists, index)
-      #     end
-      #     if trait_lists
-      #       trait_details[:trait_list] = get_list(trait_lists, selection_lists, index)
-      #     end
-      #     if max_values
-      #       if max_values.count == 1
-      #         trait_details[:max_value] = max_values.first
-      #       else
-      #         trait_details[:max_value] = max_values[index]
-      #       end
-      #     end
-      #     if start_values
-      #       if start_values.count == 1
-      #         trait_details[:start_value] = start_values.first
-      #       else
-      #         trait_details[:start_value] = start_values[index]
-      #       end
-      #     end
-      #     if freebie_cost
-      #       trait_details[:freebie_cost] = freebie_cost[index]
-      #     end
-      #     if experiance_dot_cost
-      #       trait_details[:experiance_dot_cost] = experiance_dot_cost[index]
-      #     end
-      #     if experiance_new_cost
-      #       trait_details[:experiance_new_cost] = experiance_new_cost[index]
-      #     end
-      #     trait_array.push(trait_details)
-      #   end
-      #   return trait_array
-      # end
+      def template_meta(template)
+        meta = {}
+
+        meta[:title] = template['Template']['Title'].downcase
+        meta[:subtitle] = template['Template']['Subtitle'].downcase
+        meta[:owner]= 'admin'
+        meta[:privacy] = 'public' # 'private'
+
+        meta
+      end
+
+      def selection_lists(template)
+        list_array = []
+        all_lists = template['Template']['SelectionLists'].split(',')
+        all_lists.each do |list|
+          list_hash = {}
+          list_hash[list.downcase.to_sym] = template['SelectionLists'][list].downcase.split(',')
+          list_array.push(list_hash)
+        end
+        list_array
+      end
+
+      def true_false(int)
+        if int && int == 0
+          return false
+        elsif int && int == 1
+          return true
+        else
+          return false
+        end
+      end
+
+      def get_value(values, index)
+        if values
+          if (values.count - 1) > index
+            values[index]
+          else
+            values.first
+          end
+        else
+          return nil
+        end
+      end
+
+      def group_traits(group, group_name)
+        all_traits = []
+        number_of_traits = group['Number'].to_i
+
+        traits = group['Traits'].downcase.split(',') if group['Traits']
+        trait_lists = group['TraitLists'].downcase.split(',') if group['TraitLists']
+        start_values = group['StartValues'].downcase.split(',') if group['StartValues']
+        max_values = group['MaxValues'].downcase.split(',') if group['MaxValues']
+        values = group['Values'].downcase.split(',') if group['Values']
+        value_lists = group['ValueLists'].downcase.split(',') if group['ValueLists']
+        start_values = group['StartValues'].downcase.split(',') if group['StartValues']
+        initial_values = group['InitialValues'].downcase.split(',') if group['InitialValues']
+        freebie_values = group['FreebieValues'].downcase.split(',') if group['FreebieValues']
+        experience_values = group['ExperienceValues'].downcase.split(',') if group['ExperienceValues']
+        if traits
+
+          traits.each_with_index do |trait, index|
+            t = {}
+            trait_name = trait.gsub(':','').downcase.to_sym
+            t[trait_name] = {}
+            t[trait_name][:value] = get_value(values, index)
+            t[trait_name][:trait_list] = get_value(trait_lists, index)
+            t[trait_name][:max_value] = get_value(max_values, index).to_i
+            t[trait_name][:value_list] = get_value(value_lists, index)
+            t[trait_name][:start_value] = get_value(start_values, index)
+            t[trait_name][:initial_value] = get_value(initial_values, index)
+            t[trait_name][:freebie_value] = get_value(freebie_values, index)
+            t[trait_name][:experience_value] = get_value(experience_values, index)
+            all_traits.push(t)
+          end
+
+          if traits.count != number_of_traits
+            extra_traits = number_of_traits - traits.count
+            index = 0
+            extra_traits.times do |trait|
+              index += 1
+              t = {}
+              trait_name = "#{group_name.downcase.parameterize}_#{index+traits.count}".to_sym
+              t[trait_name] = {}
+              t[trait_name][:value] = get_value(values, index)
+              t[trait_name][:trait_list] = get_value(trait_lists, index)
+              t[trait_name][:max_value] = get_value(max_values, index).to_i
+              t[trait_name][:value_list] = get_value(value_lists, index)
+              t[trait_name][:start_value] = get_value(start_values, index)
+              t[trait_name][:initial_value] = get_value(initial_values, index)
+              t[trait_name][:freebie_value] = get_value(freebie_values, index)
+              t[trait_name][:experience_value] = get_value(experience_values, index)
+              all_traits.push(t)
+            end
+          end
+
+        end
+
+        return all_traits
+      end
+
+      def groups(template, segment)
+        all_groups = []
+        if template[segment]['Groups']
+          groups = template[segment]['Groups'].split(',')
+          groups.each do |group|
+            g = {}
+
+            g[group.downcase.to_sym] = {
+                        group_type: template[group]['Type'].downcase,
+                        number_of_traits: template[group]['Number'].to_i,
+                        freebie_cost: template[group]['FreebieCost'].to_i,
+                        show_heading: true_false(template[group]['ShowHeading'].to_i),
+                        has_boxes: true_false(template[group]['HasBoxes'].to_i),
+                        has_dots: true_false(template[group]['HasDots'].to_i),
+                        experience_dot_cost: template[group]['ExperienceDotCost'].to_i,
+                        experience_new_cost: template[group]['ExperienceNewCost'].to_i,
+                        dots_available: template[group]['DotsAvailable'].to_i,
+                        traits: group_traits(template[group], group)
+                      }
+            all_groups.push(g)
+          end
+        end
+        all_groups
+      end
+
+      def segments(template)
+        segments = []
+        template['Template'].each do |key, value|
+          if key.include?('Segment')
+            segment = {}
+
+            segment[value.downcase.to_sym] = {
+                                                show_heading: true_false(template[value]['ShowHeading']),
+                                                has_priorities: true_false(template[value]['HasPriorities']),
+                                                dots_available: template[value]['DotsAvailable'].to_i
+                                              }
+            segment[value.downcase.to_sym][:groups] = groups(template, value)
+            segments.push(segment)
+          end
+        end
+
+        segments
+      end
 
       def parse_gct(file)
         begin
           file = File.open(file.path, 'r+:windows-1252:utf-8')
           template_hash = {}
           template = ParseConfig.new(file)
-          # template_hash[:title] = template['Template']['Title'].downcase
-          # template_hash[:subtitle] = template['Template']['Subtitle'].downcase
-          # template_hash[:stage] = template['Template']['Stage']
-          # template_hash[:freeb_total] = template['Template']['FreebTot']
-          # template_hash[:exp_total] = template['Template']['ExpTot']
-          # segments = []
-          # template['Template'].each do |key, value|
-          #   if key.include?('Segment')
-          #     segment = {}
-          #     segment[:segment] = value.downcase
-          #     if template[value]['Columns']
-          #       segment[:columns] = template[value]['Columns']
-          #     else
-          #       segment[:columns] = '3'
-          #     end
-          #     segment[:has_priorities] = template[value]['HasPriorities'].downcase
-          #     segment[:show_heading] = template[value]['ShowHeading'].downcase
-          #     segment_groups = template[value]['Groups'].split(',')
-          #     segment[:groups] = []
-          #     segment_groups.each do |sg|
-          #       number = template[sg]['Number'].downcase
-          #       show_heading = template[sg]['ShowHeading']
-          #       dots_available = template[sg]['DotsAvailable']
-          #       type = template[sg]['Type'].downcase
-          #       # Traits!
-          #       traits = template[sg]['Traits'].split(',')
-          #       values = template[sg]['Values'].split(',') unless template[sg]['Values'].nil?
-          #       value_lists = template[sg]['ValueLists'].split(',') unless template[sg]['ValueLists'].nil?
-          #       trait_lists = template[sg]['TraitLists'].split(',') unless template[sg]['TraitLists'].nil?
-          #       max_values = template[sg]['MaxValues'].split(',') unless template[sg]['MaxValues'].nil?
-          #       start_values = template[sg]['StartValues'].split(',') unless template[sg]['StartValues'].nil?
-          #       freebie_cost = template[sg]['FreebieCost'].split(',') unless template[sg]['FreebieCost'].nil?
-          #       experiance_dot_cost = template[sg]['ExperienceDotCost'].split(',') unless template[sg]['ExperienceDotCost'].nil?
-          #       experiance_new_cost = template[sg]['ExperienceNewCost'].split(',') unless template[sg]['ExperienceNewCost'].nil?
-          #       selection_lists = template['SelectionLists']
-          #
-          #       trait_array = get_traits(traits, values, value_lists, max_values, start_values, freebie_cost, experiance_dot_cost, experiance_new_cost, selection_lists, trait_lists)
-          #
-          #       # write the group hash
-          #       segment[:groups].push({ group: sg, number: number, show_heading: show_heading, dots_available: dots_available, type: type, traits: trait_array })
-          #     end
-          #     segments.push(segment)
-          #   end
-          # end
-          # template_hash[:segments] = segments
-          # # binding.pry
+          template_hash[:meta_data] = template_meta(template)
+          template_hash[:selection_lists] = selection_lists(template)
+          template_hash[:segments] = segments(template)
+          # return template_hash
           return template_hash
-          # return JSON.pretty_generate(template_hash)
         rescue ArgumentError => e
           # binding.pry
           raise ArgumentError, e

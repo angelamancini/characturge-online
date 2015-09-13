@@ -1,14 +1,6 @@
 <% title 'Templates' %>
 <h1>Templates</h1>
-<h3>Import Template</h3>
-<%= form_tag import_templates_path, multipart: true do %>
-<span class="btn btn-default btn-file">
-  <%= file_field_tag :file %>
-</span>
 
-  <%= submit_tag "Import", class: 'btn btn-primary' %>
-<% end %>
-<hr />
 <% if @templates.count > 0 %>
   <div class="table-responsive">
     <table id='template-table' class='table table-striped table-hover'>
