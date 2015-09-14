@@ -4,7 +4,8 @@ development:
   database: characturge_online_development
   pool: 5
   username: vagrant
-  password: 
+  password: ''
+  host: localhost
 
 test: &TEST
   adapter: postgresql
@@ -12,5 +13,5 @@ test: &TEST
   database: characturge_online_test
   pool: 5
   username: vagrant
-  password:
-
+  password: ''
+  host: localhost
