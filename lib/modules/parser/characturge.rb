@@ -17,11 +17,13 @@ module Parser
 
       def selection_lists(template)
         list_array = []
-        all_lists = template['Template']['SelectionLists'].split(',')
-        all_lists.each do |list|
-          list_hash = {}
-          list_hash[list.downcase.to_sym] = template['SelectionLists'][list].downcase.split(',')
-          list_array.push(list_hash)
+        all_lists = template['Template']['SelectionLists'].split(',') if template['Template']['SelectionLists']
+        if all_lists
+          all_lists.each do |list|
+            list_hash = {}
+            list_hash[list.downcase.to_sym] = template['SelectionLists'][list].downcase.split(',')
+            list_array.push(list_hash)
+          end
         end
         list_array
       end

@@ -12,14 +12,15 @@ Vagrant.configure(2) do |config|
   # Every Vagrant development environment requires a box.
   config.vm.box = "angelamancini/centos71-x64"
   config.vm.hostname = 'devbox'
+  config.vm.network :private_network, ip: '192.168.32.32'
 
-  # config.ssh.username = 'vagrant'
-  # config.ssh.password = 'vagrant'
+  config.ssh.username = 'vagrant'
+  config.ssh.password = 'vagrant'
   config.ssh.private_key_path = '~/.ssh/vagrant_rsa'
   config.ssh.insert_key = true
   # allow guest os to use host os ssh keys
   config.ssh.forward_agent = true
-
+  config.ssh.insert_key = true
   # forward the ports
   PORTS.each do |port|
     config.vm.network :forwarded_port, guest: port, host: port

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150831192221) do
+ActiveRecord::Schema.define(version: 20150917011827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,14 @@ ActiveRecord::Schema.define(version: 20150831192221) do
     t.boolean  "show_heading"
     t.integer  "dots_available"
     t.string   "input_type"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.boolean  "has_dots",            default: false
+    t.boolean  "has_boxes",           default: false
+    t.integer  "freebie_cost"
+    t.integer  "experience_new_cost"
+    t.integer  "experience_dot_cost"
+    t.integer  "max_value"
   end
 
   create_table "list_items", force: :cascade do |t|
@@ -58,11 +64,11 @@ ActiveRecord::Schema.define(version: 20150831192221) do
 
   create_table "segments", force: :cascade do |t|
     t.string   "name"
-    t.integer  "columns"
     t.boolean  "has_priorities"
     t.boolean  "show_heading"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "dots_available"
   end
 
   create_table "selection_lists", force: :cascade do |t|
