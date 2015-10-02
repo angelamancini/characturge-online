@@ -2,194 +2,30 @@
 <h1>New Template from Import</h1>
 <p>All template data imports in lower case</p>
 <%= form_for @template, url: { controller: :templates, action: :create }, html: {id: 'new-template', class: 'form-horizontal profile'} do |f| %>
-  <h3>Template Meta Data</h3>
   <%= render 'layouts/messages', object: f.object %>
-  <div class="form-group">
-    <%= f.label :title, class: 'col-sm-3 control-label' %>
+  <div class='form-group'>
     <div class='col-sm-6'>
-      <%= f.text_field :title, value:@import[:meta_data][:title], class: 'form-control' %>
+      <h3>
+        Template Meta Data <span class='pull-right'>
+        <small><%= link_to "<i class='fa fa-eye-slash'></i> Hide".html_safe, '', class: 'toggle-thing', id: 'link-metadata-div' %></small>
+        </span>
+      </h3>
     </div>
   </div>
-  <div class="form-group">
-    <%= f.label :subtitle, class: 'col-sm-3 control-label' %>
+  <div id='metadata-div'>
+    <%= render 'metadata', f: f %>
+  </div>
+  <div class='form-group'>
     <div class='col-sm-6'>
-      <%= f.text_field :subtitle, value:@import[:meta_data][:subtitle], class: 'form-control' %>
+      <h3>
+        Selection Lists <span class='pull-right'>
+        <small><%= link_to "<i class='fa fa-eye-slash'></i> Hide".html_safe, '', class: 'toggle-thing', id: 'link-selection-lists-div' %></small>
+        </span>
+      </h3>
     </div>
   </div>
-  <!-- <div class="form-group">
-    < %= f.label :owner, class: 'col-sm-3 control-label' %>
-    <div class='col-sm-6'>
-      < %= f.text_field :owner, value:@import[:meta_data][:owner], class: 'form-control', disabled: true %>
-    </div>
-  </div> -->
-  <div class="form-group">
-    <%= f.label :privacy, 'Template Privacy', class: 'col-sm-3 control-label' %>
-    <div class='col-sm-6'>
-       <%= f.select :privacy, options_for_select(['private', 'public'], f.object.privacy ||  @import[:meta_data][:privacy]), { include_blank: false }, { class: 'form-control' } %>
-    </div>
+  <div id='selection-lists-div'>
+    <%= render 'selection_lists', f: f %>
   </div>
-  <br clear=ALL />
-
-  <h3>Selection Lists</h3>
-  <% @import[:selection_lists].each do |selection_list| %>
-    <div class='selection-list' id='selection-list-<%= selection_list.keys.first.to_s.parameterize %>'>
-      <div class='pull-right'><%= link_to "<i class='fa fa-eye-slash'></i> Hide List".html_safe, '', class: 'btn btn-info btn-sm hide-thing' %> <%= link_to "<i class='fa fa-trash'></i> Delete List".html_safe, '', class: 'btn btn-danger btn-sm delete-thing', id: "delete-selection-list-#{selection_list.keys.first.to_s.parameterize}" %></div>
-      <%= f.fields_for :selection_lists, @selection_lists do |list| %>
-        <div class="form-group">
-          <%= list.label :name, 'Selection List', class: 'col-sm-3 control-label' %>
-          <div class='col-sm-6'>
-            <%= list.text_field :name, value: selection_list.keys.first.to_s, class: 'form-control' %>
-          </div>
-        </div>
-        <% selection_list[selection_list.keys.first].each_with_index do |list_item, index| %>
-          <div class='selection-list-item' id='selection-list-item-<%= list_item.parameterize %>'>
-            <div class='pull-right'><%= link_to "<i class='fa fa-trash'></i> Delete List Item".html_safe, '', class: 'btn btn-danger btn-xs delete-thing', id: "delete-selection-list-item-#{list_item.parameterize}" %></div>
-            <div class='col-sm-offset-2'>
-              <%= list.fields_for :list_items, @list_items do |item| %>
-                <div class="form-group">
-                  <%= list.label :name, selection_list.keys.first.to_s.singularize.titleize, class: 'col-sm-3 control-label' %>
-                  <div class='col-sm-4'>
-                    <%= list.text_field :name, value: list_item, class: 'form-control' %>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
-
-  <h3>Segments</h3>
-  <% @import[:segments].each do |segment| %>
-    <div class='segment'>
-      <%= f.fields_for :segments, @segments do |seg| %>
-      <h4>Segment</h4>
-      <!-- <pre><%= segment %></pre> -->
-        <div class="form-group">
-          <%= seg.label :name, 'Segment', class: 'col-sm-3 control-label' %>
-          <div class='col-sm-6'>
-            <%= seg.text_field :name, value: segment.keys.first.to_s, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-6">
-            <div class="checkbox">
-              <label>
-                <%= seg.check_box :has_priorities, checked:segment[:has_priorities] %> Has priorities
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-6">
-            <div class="checkbox">
-              <label>
-                <%= seg.check_box :show_heading, checked:segment[:show_heading] %> Show heading
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <%= seg.label :dots_available, 'Dots Available', class: 'col-sm-3 control-label' %>
-          <div class='col-sm-2'>
-            <%= seg.number_field :dots_available, value: segment[:dots_available].to_i, class: 'form-control', min: 0 %>
-          </div>
-        </div>
-        <h5>Groups for <%= segment.keys.first.to_s %></h5>
-        <!-- <div class="form-group">
-          <div class='col-sm-6'><hr /></div>
-        </div> -->
-        <% segment[segment.keys.first][:groups].each do |group| %>
-          <%= f.fields_for :groups, @groups do |grp| %>
-          <div class="form-group">
-            <div class='col-sm-6'><hr /></div>
-          </div>
-            <!-- <pre><%= group %></pre> -->
-            <div class="form-group">
-              <%= grp.label :name, 'Group', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-6'>
-                <%= grp.text_field :name, value: group.keys.first.to_s, class: 'form-control' %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :input_type, class: 'col-sm-3 control-label' %>
-              <div class='col-sm-6'>
-                <%= grp.text_field :input_type, value: group[group.keys.first][:group_type], class: 'form-control' %>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-6">
-                <div class="checkbox">
-                  <label>
-                    <%= grp.check_box :show_heading, checked:group[group.keys.first][:show_heading] %> Show heading
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-6">
-                <div class="checkbox">
-                  <label>
-                    <%= grp.check_box :has_dots, checked:group[group.keys.first][:has_dots] %> Has dots
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-6">
-                <div class="checkbox">
-                  <label>
-                    <%= grp.check_box :has_boxes, checked:group[group.keys.first][:has_boxes] %> Has boxes
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :number, 'Number of Traits', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :number, value: group[group.keys.first][:number_of_traits].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <%= grp.label :dots_available, 'Dots Available', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :dots_available, value: group[group.keys.first][:dots_available].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :freebie_cost, 'Freebie Cost', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :freebie_cost, value: group[group.keys.first][:freebie_cost].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :experience_new_cost, 'Experience New Cost', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :experience_new_cost, value: group[group.keys.first][:experience_new_cost].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :experience_dot_cost, 'Experience Dot Cost', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :experience_dot_cost, value: group[group.keys.first][:experience_dot_cost].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= grp.label :max_value, 'Max Value', class: 'col-sm-3 control-label' %>
-              <div class='col-sm-2'>
-                <%= grp.number_field :max_value, value: group[group.keys.first][:max_value].to_i, class: 'form-control', min: 0 %>
-              </div>
-            </div>
-            <% group[group.keys.first][:traits].each do |trait| %>
-              <pre><%= trait %></pre>
-            <% end %>
-          <% end %>
-        <% end %>
-        <hr />
-      <% end %>
-    </div>
-  <% end %>
 <% end %>
 <!-- <pre><%= JSON.pretty_generate(@import) %></pre> -->

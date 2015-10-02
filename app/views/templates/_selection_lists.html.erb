@@ -1,0 +1,33 @@
+<% @import[:selection_lists].each do |selection_list| %>
+  <div class='pull-right'>
+    <small>
+      <%= link_to "<i class='fa fa-eye-slash'></i> Hide".html_safe, '', class: 'toggle-thing', id: "link-selection-list-#{selection_list.keys.first.to_s.parameterize}-div" %>
+    </small>
+  </div>
+  <%= f.fields_for :selection_lists, @selection_lists do |list| %>
+    <div class="form-group">
+      <%= list.label :name, 'Selection List', class: 'col-sm-3 control-label' %>
+      <div class='col-sm-6'>
+        <%= list.text_field :name, value: selection_list.keys.first.to_s, class: 'form-control' %>
+      </div>
+    </div>
+    <div id='selection-list-<%= selection_list.keys.first.to_s.parameterize %>-div'>
+      <% selection_list[selection_list.keys.first].each_with_index do |list_item, index| %>
+        <div class='selection-list-item' id='selection-list-item-<%= list_item.parameterize %>'>
+          <div class='pull-right'>
+            <small><%= link_to "<i class='fa fa-trash'></i> Delete List Item".html_safe, '', class: 'text-danger delete-thing', id: "delete-selection-list-item-#{list_item.parameterize}" %></small>
+          </div>
+          <div class='col-sm-offset-2'>
+            <%= list.fields_for :list_items, @list_items do |item| %>
+              <div class="form-group">
+                <div class='col-sm-4 col-sm-offset-2'>
+                  <%= list.text_field :name, value: list_item, class: 'form-control' %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

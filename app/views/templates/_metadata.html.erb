@@ -1,0 +1,18 @@
+<div class="form-group">
+  <%= f.label :title, class: 'col-sm-3 control-label' %>
+  <div class='col-sm-6'>
+    <%= f.text_field :title, value:@import[:meta_data][:title], class: 'form-control' %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :subtitle, class: 'col-sm-3 control-label' %>
+  <div class='col-sm-6'>
+    <%= f.text_field :subtitle, value:@import[:meta_data][:subtitle], class: 'form-control' %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :privacy, 'Template Privacy', class: 'col-sm-3 control-label' %>
+  <div class='col-sm-6'>
+     <%= f.select :privacy, options_for_select(['private', 'public'], f.object.privacy ||  @import[:meta_data][:privacy]), { include_blank: false }, { class: 'form-control' } %>
+  </div>
+</div>
